@@ -15,19 +15,24 @@
 class Compute
 {
 private:
+
+	static std::vector<size_t> lenhaps_sample[2]; // 0-> haps, 1->sample
+	static std::string samplefiletype;
+
 	std::vector<Haps> HAPS;
 	std::vector<Gen> GEN;
 	std::vector<Sample_3_col> SAMPLE_3_COL;
 	std::vector<Sample_7_col> SAMPLE_7_COL;
 
 public:
-	static std::string samplefiletype;
+
 	Compute();
 	void haps2vec();
 	void sample2vec();
 	void gen2vec();
 	void createped();
 	void createmap();
+	void checkintegrity();
 
 
 

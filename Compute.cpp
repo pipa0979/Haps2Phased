@@ -20,16 +20,40 @@
  *
  * */
 std::string Compute::samplefiletype = "NULL";
+std::vector<size_t> Compute::lenhaps_sample[2];
 double linearInterpolation( double x1,  double y1, double x3, double y3,  double x2);
 Compute::Compute()
 {
+
 	haps2vec();
 	sample2vec();
 	gen2vec();
+	checkintegrity();	//check if the no of personrs in theHAPS file is equal to the length of the sample file
 	createped();
 	createmap();
 
 }
+
+
+void Compute::checkintegrity()
+{
+
+lenhaps_sample[0].push_back(HAPS[0].dnaseq.length()/4); // spaces and pairs hence 4
+if (lenhaps_sample[0][0] == lenhaps_sample[1][0])
+{
+	//std::cout<<"SAMPLE AND HAP FILE CONSISTENT"<<std::endl;
+}
+else
+{
+	std::cout<<"INCONSISTENT SAMPLE AND HAP FILE... THE NUMBER OF PAIRS IN THE "<<
+			   "HAPS FILE IS NOT EQUAL TO THE NUBER OF LINES IN THE SAMPLE FILE... EXITING "<<std::endl;
+	exit(0);
+}
+
+
+
+}
+
 
 
 void Compute::createmap()
@@ -104,15 +128,6 @@ double linearInterpolation( double x1,  double y1, double x3, double y3,  double
 	return y2;
 
 }
-
-
-
-
-
-
-
-
-
 
 void Compute::createped()
 {
@@ -192,19 +207,6 @@ void Compute::createped()
 	fped.close();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 void Compute::haps2vec()
 {
 	std::ifstream hapfile ("./src/Test.hap");
@@ -270,10 +272,13 @@ void Compute::sample2vec()
 		{
 			samplefiletype = "3_COL";
 			std::getline(samplefile, line ); // get rid of 0 0 0 in the second row of the file
+			size_t countlines = 0;
 			if (samplefile.is_open())
 				{
+
 					while(std::getline(samplefile, line ))
 						{
+							countlines++;	//get the number of liens to get the integrity of the file
 							ss<<line;
 							ss>>sample_3_col.ID_1;
 							ss>>sample_3_col.ID_2;
@@ -282,6 +287,7 @@ void Compute::sample2vec()
 							ss.clear();
 						}
 				}
+			lenhaps_sample[1].push_back(countlines);
 			samplefile.close();
 		}
 

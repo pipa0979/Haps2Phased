@@ -14,19 +14,7 @@ using namespace std;
 
 int main() {
 
-	std::string line;
 	Compute compute;
-
-
-
-
-
-
-
-
-
-
-
 
 
 	return 0;
